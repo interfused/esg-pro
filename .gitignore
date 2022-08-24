@@ -1,0 +1,50 @@
+.DS_Store
+
+# Wordpress - ignore core, configuration, examples, uploads and logs.
+# https://github.com/github/gitignore/blob/main/WordPress.gitignore
+
+# Core
+#
+# Note: if you want to stage/commit WP core files
+# you can delete this whole section/until Configuration.
+/wp-admin/
+/assets/index.php
+/assets/languages
+/assets/plugins/index.php
+/assets/themes/index.php
+/wp-includes/
+/index.php
+/license.txt
+/readme.html
+/wp-*.php
+/xmlrpc.php
+
+# Configuration
+wp-config.php
+
+# Example themes
+/assets/themes/twenty*/
+/assets/themes/sinatra*/
+# Example plugin
+/assets/plugins/hello.php
+
+# Uploads
+/assets/uploads/
+
+# Log files
+*.log
+
+# htaccess
+/.htaccess
+
+# All plugins
+#
+# Note: If you wish to whitelist plugins,
+# uncomment the next line
+#/assets/plugins
+
+# All themes
+#
+# Note: If you wish to whitelist themes,
+# uncomment the next line
+#/assets/themes
