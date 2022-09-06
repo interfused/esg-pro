@@ -1,0 +1,79 @@
+/** FORM RESET / BASIC STYLE **/
+form {
+  @extend .swatch1;
+  background-color: lighten($base-color, 50%);
+  padding: 2em;
+
+  fieldset {
+    margin-top: 1em;
+    border: 1px solid #ccc;
+    padding: 1em;
+    p {
+      font-weight: normal;
+    }
+  }
+
+  input:not([type="submit"]),
+  textarea {
+    width: 100%;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: auto;
+  }
+
+  input[type="checkbox"] + label {
+    display: inline;
+    font-weight: normal;
+  }
+
+  label,
+  fieldset {
+    display: block;
+    font-weight: bold;
+  }
+  input:not([type="submit"]) {
+    box-sizing: border-box;
+  }
+  .formFieldsWrapper {
+    column-count: 2;
+    background-color: #f00;
+  }
+}
+
+#basicFields {
+  display: none;
+}
+
+.formFieldWrapper + .formFieldWrapper {
+  margin-top: 1em;
+}
+
+form + form,
+.btnActions {
+  margin-top: 2em;
+}
+
+/** ACF FORM OVERWRITE **/
+form.acf-form {
+  a.acf-button {
+    text-decoration: none;
+    font-size: 0.8rem;
+    &:hover {
+      color: $white;
+    }
+  }
+
+  div.acf-fields.acf-form-fields.-top
+    > div.acf-field.acf-field-repeater
+    > div.acf-label
+    > label {
+    @extend .h2;
+  }
+
+  .acf-form-submit {
+    border-top: 1px solid $light-gray;
+    padding-top: 1em;
+  }
+}

@@ -1,0 +1,111 @@
+@import "setup/flexbox.grid.scss";
+@import "setup/colors.scss";
+@import "setup/typography.scss";
+@import "setup/forms.scss";
+
+div {
+  position: relative;
+  box-sizing: border-box;
+}
+
+p {
+  margin: 1em 0;
+}
+hr {
+  margin: 2em 0;
+}
+
+/** NAVIGATION **/
+nav.sidebar {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+      padding: 0;
+      margin: 0;
+    }
+  }
+  a {
+    display: block;
+    padding: 1em;
+    text-decoration: none;
+    &:hover {
+      background-color: darken($base-color, 10%);
+    }
+  }
+
+  li.active {
+    background-color: darken($base-color, 10%);
+  }
+}
+
+ul.bare {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marginTop-2x {
+  margin-top: 2em;
+}
+
+fieldset.practice_service_categories {
+  @extend .marginTop-2x;
+  ul {
+    column-count: 3;
+  }
+}
+
+.btn {
+  position: relative;
+  margin-top: 0.5em;
+  padding: 0.5em 1em;
+  text-decoration: none;
+
+  border: 0;
+  background-color: $base-color;
+  color: $white;
+  cursor: pointer;
+  line-height: 50px;
+  &:hover {
+    background: darken($base-color, 10%);
+    color: $white;
+  }
+}
+
+.sidebarnav {
+  @extend .swatch2;
+}
+.columns-2 {
+  column-count: 2;
+}
+
+.cards-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.card.overview {
+  @extend .swatch1;
+  @extend .boxshadow;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  width: 49%;
+  overflow: hidden;
+  height: 300px;
+  margin-bottom: 1em;
+
+  .excerpt {
+    margin: 0;
+  }
+}
+
+.cards-wrapper#practice-location-cards {
+  .card {
+    height: auto;
+    text-align: center;
+  }
+}

@@ -1,0 +1,46 @@
+$base-color: #0f75bc;
+$white: #fff;
+$light-gray: #ddd;
+$medium-gray: #888;
+$dark-gray: #333;
+
+@mixin setup_swatch($bg-color, $text-color, $header-color, $link-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  p {
+    color: $text-color;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $header-color;
+  }
+  a {
+    color: $link-color;
+  }
+}
+
+.boxshadow {
+  box-shadow: -1px 1px 7px 0px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: -1px 1px 7px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: -1px 1px 7px 0px rgba(0, 0, 0, 0.25);
+}
+
+.swatch1 {
+  @include setup_swatch($white, $dark-gray, $dark-gray, $dark-gray);
+}
+.swatch2 {
+  @include setup_swatch($base-color, $white, $white, $white);
+}
+
+.alert {
+  margin: 2em 0;
+  padding: 1em;
+  &.alert-info {
+    @extend .swatch1;
+    background-color: lighten($base-color, 80%);
+  }
+}
