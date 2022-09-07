@@ -15,6 +15,10 @@ $edit_action = $_GET['action'] ?? "default";
         echo sprintf(esg_get_section_format('default'), 'Edit Case Study');
         echo do_shortcode('[frontend_admin form="591"]');
     }
+
+    if ($edit_action == 'delete') {
+        include('delete_post_confirmation.php');
+    }
     ?>
 </section>
 
@@ -32,7 +36,7 @@ $edit_action = $_GET['action'] ?? "default";
     pretty_print_r($posts);
     if ($posts) {
         echo sprintf(esg_get_section_format('default'), 'My Case Studies');
-        echo '<div class="cards-wrapper">';
+        echo '<div id="case-study-cards" class="cards-wrapper">';
         foreach ($posts as $post) {
             include('case_study/tpl-overview-case-study.php');
         }

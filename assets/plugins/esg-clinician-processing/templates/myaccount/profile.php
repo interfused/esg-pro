@@ -5,11 +5,14 @@ if (is_user_logged_in()) {
     die('Must be logged in: <a href="/login">Login</a>');
 }
 $max_terms_to_insert = 10;
+
 function get_profile_alert()
 {
     $message = $_GET['alert'] ?? "default";
     $mode = $_GET['mode'] ?? "default";
     $edit_success = $_GET['edit_success'] ?? "default";
+    $delete_success = $_GET['delete_success'] ?? "default";
+
 
     $div_opening_tag = '<div class="alert alert-info">';
     $div_closing_tag = '</div>';
@@ -17,6 +20,11 @@ function get_profile_alert()
     if ('case_studies' === $mode && 1 == $edit_success) {
         $message = 'Case study has been edited';
     }
+
+    if (1 == $delete_success) {
+        $message = 'The post has been deleted';
+    }
+
 
     if (in_array($mode, array('practice_locations', 'education', 'fellowship')) && 2 == $edit_success) {
         $message = 'New location has been added';
@@ -69,7 +77,6 @@ function get_new_case_study_post_setup()
     echo 'added case study post id: ' . $edit_case_study_post_id . ' for user id: ' . $user_id;
     return $edit_case_study_post_id;
 }
-
 
 function convert_to_title_case($str)
 {
@@ -586,13 +593,32 @@ function get_hidden_fields_for_repeater($repeater_field)
     return $html;
 }
 ?>
+
 <?php
+////// START PROCESSING
 if (isset($_POST['addSystemPracticeLocation']) && isset($_REQUEST['_wpnonce']) && wp_verify_nonce($_REQUEST['_wpnonce'], 'add-system-practice-location')) {
     esg_add_system_practice_location(get_current_user_id());
 }
 
+if (isset($_GET['delete_confirm'])) {
+    echo 'ATETTEMPT DELTE';
+    pretty_print_r($_POST);
 
 
+    if (
+        isset($_POST['esg_delete_post_nonce_field'])
+        && wp_verify_nonce($_POST['esg_delete_post_nonce_field'], 'esg_delete_post')
+    ) {
+        echo 'proceed to detle';
+        //FINAL CHECK
+        if ($_POST['yes_confirm'] === 'YES') {
+            wp_delete_post($_POST['delete_esg_post']);
+            //
+            $new_url = get_edit_profile_link($_POST['mode']) . '&delete_success=1';
+            header('Location: ' . $new_url);
+        }
+    }
+}
 
 
 if (isset($_POST['add_sys_education_location'])) {

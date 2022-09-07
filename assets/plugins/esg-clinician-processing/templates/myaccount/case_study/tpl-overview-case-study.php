@@ -1,5 +1,13 @@
+<?php
+$featured_thumb_url = get_the_post_thumbnail_url($post->ID, 'medium');
+if ($featured_thumb_url == '') {
+    $featured_thumb_url = 'default.png';
+}
+?>
 <div class="card overview">
-    <div class="featured_image">featured image</div>
+    <div class="featured_image">
+        <img src="<?php echo $featured_thumb_url; ?>" />
+    </div>
     <div class="content">
         <h2><?php echo $post->post_title; ?></h2>
         <?php
@@ -12,10 +20,10 @@
         </div>
         <div class="card_actions">
             <a class="view" href="<?php the_permalink($post->ID); ?>">View</a>
-            <a class="edit" href="<?php echo get_edit_profile_link('case_studies&action=edit&id=' . $post->ID); ?>">Edit</a> <a class="delete" href="#">Delete</a>
+            <a class="edit" href="<?php echo get_edit_profile_link('case_studies&action=edit&id=' . $post->ID); ?>">Edit</a>
+            <a class="delete" href="<?php echo get_edit_profile_link('case_studies&action=delete&id=' . $post->ID); ?>">Delete</a>
 
         </div>
     </div>
 
-    tpl-overview-case-study.php
 </div>

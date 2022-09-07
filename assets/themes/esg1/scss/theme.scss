@@ -113,6 +113,14 @@ fieldset.practice_service_categories {
   .excerpt {
     margin: 0;
   }
+
+  .featured_image {
+    background-color: $light-gray;
+    overflow: hidden;
+    height: 150px;
+    width: 150px;
+    position: relative;
+  }
 }
 
 .cards-wrapper#practice-location-cards {
@@ -122,8 +130,40 @@ fieldset.practice_service_categories {
   }
 }
 
+.cards-wrapper#case-study-cards {
+  .card {
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    padding: 0;
+    align-items: center;
+
+    img {
+      height: 100%;
+      width: auto;
+    }
+    .content {
+      padding-left: 1em;
+      flex-grow: 1;
+
+      .card_meta,
+      .card_actions {
+        width: 49%;
+        display: inline-block;
+      }
+      .card_actions {
+        text-align: right;
+      }
+    }
+  }
+}
+
 section + section {
   border-top: 1px solid $light-gray;
   padding-top: 2em;
   margin-top: 2em;
+}
+
+.text-center {
+  text-align: center;
 }
