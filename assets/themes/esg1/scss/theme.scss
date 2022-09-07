@@ -4,8 +4,19 @@
 @import "setup/forms.scss";
 
 div {
-  position: relative;
   box-sizing: border-box;
+}
+
+/** MEDIA UPLOADER WAS GETTING SCREWY **/
+
+.wp-core-ui .attachment .thumbnail {
+  max-width: unset;
+  padding: 0;
+  margin: 0;
+  border: 2px solid $white;
+  &:hover {
+    border-color: $base-color;
+  }
 }
 
 p {
