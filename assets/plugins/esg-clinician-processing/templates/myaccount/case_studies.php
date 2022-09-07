@@ -2,20 +2,19 @@
 $edit_step = $_GET['add_step'] ?? "default";
 
 ?>
+<section>
+    <?php
+    echo sprintf(esg_get_section_format('default'), 'Add New Case Study');
 
-<?php
-if ($edit_step == 'default') {
-
-    $marketing_page = get_page_by_title('Case Study Benefits');
-    if ($marketing_page) {
-        echo '<section id="marketing">';
-        echo sprintf(esg_get_section_format('default'), $marketing_page->post_title);
-        echo '<div class="overview">' . $marketing_page->post_content . '</div>';
-        echo '</section>';
+    if ($edit_step == 'default') {
+        echo do_shortcode('[frontend_admin form="562"]');
     }
+    ?>
+</section>
 
 
-
+<section>
+    <?php
     $posts = get_posts(
         array(
             'posts_per_page' => -1,
@@ -34,11 +33,8 @@ if ($edit_step == 'default') {
         echo '</div>';
         echo '<hr />';
     }
-?>
-
-<?php
-}
-?>
+    ?>
+</section>
 
 
 
