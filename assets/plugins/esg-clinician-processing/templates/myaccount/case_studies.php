@@ -1,13 +1,19 @@
 <?php
-$edit_step = $_GET['add_step'] ?? "default";
+$edit_action = $_GET['action'] ?? "default";
 
 ?>
 <section>
     <?php
-    echo sprintf(esg_get_section_format('default'), 'Add New Case Study');
 
-    if ($edit_step == 'default') {
+
+    if ($edit_action == 'default') {
+        echo sprintf(esg_get_section_format('default'), 'Add New Case Study');
         echo do_shortcode('[frontend_admin form="562"]');
+    }
+
+    if ($edit_action == 'edit') {
+        echo sprintf(esg_get_section_format('default'), 'Edit Case Study');
+        echo do_shortcode('[frontend_admin form="591"]');
     }
     ?>
 </section>
@@ -31,59 +37,6 @@ $edit_step = $_GET['add_step'] ?? "default";
             include('case_study/tpl-overview-case-study.php');
         }
         echo '</div>';
-        echo '<hr />';
     }
     ?>
 </section>
-
-
-
-<?php
-$form_tag = 'esg_new_case_study';
-$form_tag1 = 'esg_new_case_study_setup';
-$form_tag2 = 'esg_new_case_study_content';
-
-$nonce = wp_create_nonce($form_tag);
-$nonce1 = wp_create_nonce($form_tag1);
-$nonce2 = wp_create_nonce($form_tag2);
-
-//var_dump(wp_get_current_user());
-
-//echo do_shortcode('[wpuf_form id="394"]');
-?>
-<?php
-if (!isset($_GET['add_step'])) {
-?>
-    <section id="step1">
-        <form id="<?php echo $form_tag1; ?>" method="POST" action="<?php echo get_edit_profile_link('case_studies&add_step=2'); ?>">
-
-            <h2>Add New Case Study</h2>
-
-            <?php
-            echo esg_generate_input_field('text', 'Case Study Title', 'post_title');
-            echo esg_generate_input_field('textarea', 'Give a brief excerpt of your case study (55 words)', 'post_excerpt');
-            ?>
-            <?php
-            echo taxonomy_to_checkboxes('case_study_category', 'case_study_categories', 'Case study categories', 'case_study');
-            ?>
-            <p>Don't see appropriate case study category option(s)? <a class="btn" href="<?php get_edit_profile_link('add_system_case_study_category'); ?>">Add Option(s)</a></p>
-
-            <input type="hidden" name="<?php echo $form_tag1; ?>" value="1" />
-            <input type="hidden" name="_wpnonce" value="<?php echo $nonce1; ?>" />
-
-            <div class="btnActions">
-                <button type="submit">Continue</button>
-            </div>
-        </form>
-
-    </section>
-<?php
-}
-?>
-
-<?php
-if (isset($_GET['add_step']) && $_GET['add_step'] == 2) {
-
-    $edit_case_study_post_id = get_new_case_study_post_setup();
-    include('case_study-edit.php');
-} ?>

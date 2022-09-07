@@ -627,7 +627,6 @@ function esg_get_profile_edit_url($mode)
 $display_mode = $_GET['mode'] ?? "default";
 ?>
 
-<h2>esg_edit_profile_fields template</h2>
 <div class="row <?php echo $display_mode; ?>">
     <div class="col-md-3 swatch2">
         <nav class="sidebar <?php echo $display_mode; ?>">

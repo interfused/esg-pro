@@ -121,3 +121,9 @@ fieldset.practice_service_categories {
     text-align: center;
   }
 }
+
+section + section {
+  border-top: 1px solid $light-gray;
+  padding-top: 2em;
+  margin-top: 2em;
+}

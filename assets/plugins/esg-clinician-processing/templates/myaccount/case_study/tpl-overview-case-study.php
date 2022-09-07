@@ -12,7 +12,7 @@
         </div>
         <div class="card_actions">
             <a class="view" href="<?php the_permalink($post->ID); ?>">View</a>
-            <a class="edit" href="#">Edit</a> <a class="delete" href="#">Delete</a>
+            <a class="edit" href="<?php echo get_edit_profile_link('case_studies&action=edit&id=' . $post->ID); ?>">Edit</a> <a class="delete" href="#">Delete</a>
 
         </div>
     </div>
