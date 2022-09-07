@@ -687,7 +687,6 @@ $display_mode = $_GET['mode'] ?? "default";
         include_conditional_display_template();
         ?>
 
-        <p>extra content here</p>
     </div>
 
 </div>

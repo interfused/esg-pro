@@ -33,7 +33,7 @@ $edit_action = $_GET['action'] ?? "default";
             'post_type' => 'case_study'
         )
     );
-    pretty_print_r($posts);
+
     if ($posts) {
         echo sprintf(esg_get_section_format('default'), 'My Case Studies');
         echo '<div id="case-study-cards" class="cards-wrapper">';
