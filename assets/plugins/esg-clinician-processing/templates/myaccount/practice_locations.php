@@ -1,13 +1,19 @@
 <form id="practiceLocations" method="POST" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 
 
-    <div>
-        <?php echo sprintf(esg_get_section_format('default'), 'My Current Practice Location(s)'); ?>
+    <section>
 
-        <?php echo get_hidden_fields_for_repeater('practice_locations_details'); ?>
-        <hr />
-    </div>
-    <div id="addNew">
+        <?php
+        $html = get_hidden_fields_for_repeater('practice_locations_details');
+        if ($html != '') {
+            echo sprintf(esg_get_section_format('default'), 'My Current Practice Location(s)');
+            echo $html;
+            echo '<hr />';
+        }
+        ?>
+
+    </section>
+    <section id="addNew">
         <?php echo sprintf(esg_get_section_format('default'), 'Add Your New Practice Location & Services'); ?>
 
         <p>Don't see your practice location / service option(s) listed below?<br>
@@ -63,5 +69,6 @@
             <input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>" />
             <button type="submit">Add to my list</button>
         </div>
+    </section>
 </form>
 </div>

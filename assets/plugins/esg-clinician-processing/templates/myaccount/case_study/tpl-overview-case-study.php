@@ -7,9 +7,13 @@
             echo '<p class="excerpt">' . $post->post_excerpt . '</p>';
         }
         ?>
-
-        <div class="btnActions">
+        <div class="card_meta">
             Status: <span class="<?php echo $post->post_status; ?>"><?php echo $post->post_status; ?></span>
+        </div>
+        <div class="card_actions">
+            <a class="view" href="<?php the_permalink($post->ID); ?>">View</a>
+            <a class="edit" href="#">Edit</a> <a class="delete" href="#">Delete</a>
+
         </div>
     </div>
 

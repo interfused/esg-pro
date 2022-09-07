@@ -1,11 +1,11 @@
 <?php
-$uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
 $max_records_cnt  = 10;
 $form_id = 'add_sys_edu_studies';
+$referrer = $_SERVER['HTTP_REFERER'] ?? 'default';
 ?>
 
-<form id="<?php echo $form_id; ?>" method="POST" action="<?php $uri_parts[0]; ?>?mode=education">
-    <h3>Didn't find your field(s) of study listed previously?<br /><small>Add up to <?php echo $max_records_cnt; ?> details below</small></h3>
+<form id="<?php echo $form_id; ?>" method="POST" action="<?php echo get_edit_profile_link('education'); ?>">
+    <h3>Didn't find your field of study option(s) listed previously?<br /><small>Add up to <?php echo $max_records_cnt; ?> details below</small></h3>
     <hr>
     <?php
     for ($i = 1; $i <= $max_records_cnt; $i++) {
@@ -17,6 +17,7 @@ $form_id = 'add_sys_edu_studies';
     <input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>" />
 
     <div class="btnActions">
+        <input type="hidden" name="success_edit_url" value="<?php echo $referrer; ?>&edit_success=3">
         <button type="submit">Add Field(s) of Study</button>
     </div>
 </form>

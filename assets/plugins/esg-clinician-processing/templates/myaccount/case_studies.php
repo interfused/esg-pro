@@ -55,7 +55,7 @@ $nonce2 = wp_create_nonce($form_tag2);
 if (!isset($_GET['add_step'])) {
 ?>
     <section id="step1">
-        <form id="<?php echo $form_tag1; ?>" method="POST" action="<?php $uri_parts[0]; ?>?mode=case_studies&add_step=2">
+        <form id="<?php echo $form_tag1; ?>" method="POST" action="<?php echo get_edit_profile_link('case_studies&add_step=2'); ?>">
 
             <h2>Add New Case Study</h2>
 
@@ -66,7 +66,7 @@ if (!isset($_GET['add_step'])) {
             <?php
             echo taxonomy_to_checkboxes('case_study_category', 'case_study_categories', 'Case study categories', 'case_study');
             ?>
-            <p>Don't see appropriate case study category option(s)? <a class="btn" href="<?php echo $uri_parts[0] ?>?mode=add_system_case_study_category">Add Option(s)</a></p>
+            <p>Don't see appropriate case study category option(s)? <a class="btn" href="<?php get_edit_profile_link('add_system_case_study_category'); ?>">Add Option(s)</a></p>
 
             <input type="hidden" name="<?php echo $form_tag1; ?>" value="1" />
             <input type="hidden" name="_wpnonce" value="<?php echo $nonce1; ?>" />

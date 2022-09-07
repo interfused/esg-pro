@@ -1,8 +1,8 @@
 <?php
-$uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
 $form_tag = 'add_sys_education_location';
+$referrer = $_SERVER['HTTP_REFERER'] ?? 'default';
 ?>
-<form id="<?php echo $form_tag; ?>" method="POST" action="<?php $uri_parts[0]; ?>?mode=education">
+<form id="<?php echo $form_tag; ?>" method="POST" action="<?php echo get_edit_profile_link('education'); ?>">
     <h3>Didn't find your eduational institution?<br /><small>Add the details below</small></h3>
     <?php
     esg_generate_input_field('text', 'Name of facility', 'title');
@@ -25,6 +25,7 @@ $form_tag = 'add_sys_education_location';
         <input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>" />
     </div>
     <div class="btnActions">
+        <input type="hidden" name="success_edit_url" value="<?php echo $referrer; ?>&edit_success=2">
         <button type="submit">Add Location</button>
     </div>
 </form>

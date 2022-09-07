@@ -1,8 +1,7 @@
 <?php
-$uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
 $form_tag = 'add_case_study_categories';
 ?>
-<form id="<?php echo $form_tag; ?>" method="POST" action="<?php $uri_parts[0]; ?>?mode=case_studies">
+<form id="<?php echo $form_tag; ?>" method="POST" action="<?php echo get_edit_profile_link('case_studies') ?>">
     <h3>Didn't find your case study categories?<br /><small>Add the details below</small></h3>
     <hr>
     <?php

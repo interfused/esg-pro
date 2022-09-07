@@ -1,7 +1,8 @@
 <?php
-$uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+$referrer = $_SERVER['HTTP_REFERER'] ?? 'default';
 ?>
-<form id="addSystemPracticeLocation" method="POST" action="<?php $uri_parts[0]; ?>?mode=practice_locations">
+
+<form id="addSystemPracticeLocation" method="POST" action="<?php echo get_edit_profile_link('practice_locations'); ?>">
     <h3>Add Practice Location</h3>
     <hr>
     <?php
@@ -25,6 +26,7 @@ $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
         <input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>" />
     </div>
     <div class="btnActions">
+        <input type="hidden" name="success_edit_url" value="<?php echo $referrer; ?>&edit_success=2">
         <button type="submit">Add Location</button>
     </div>
 </form>

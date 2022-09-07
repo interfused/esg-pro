@@ -37,10 +37,9 @@ $dark-gray: #333;
 }
 
 .alert {
-  margin: 2em 0;
   padding: 1em;
   &.alert-info {
     @extend .swatch1;
-    background-color: lighten($base-color, 80%);
+    background-color: lighten($base-color, 40%);
   }
 }

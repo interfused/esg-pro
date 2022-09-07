@@ -1,10 +1,10 @@
 <?php
-$uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
 $max_records_cnt  = 5;
 $form_id = 'add_sys_edu_degrees';
+$referrer = $_SERVER['HTTP_REFERER'] ?? 'default';
 ?>
 
-<form id="<?php echo $form_id; ?>" method="POST" action="<?php $uri_parts[0]; ?>?mode=education">
+<form id="<?php echo $form_id; ?>" method="POST" action="<?php echo get_edit_profile_link('education');  ?>">
     <h3>Didn't find your education degree option(s) listed previously?<br /><small>Add up to <?php echo $max_records_cnt; ?> details below</small></h3>
     <hr>
     <?php
@@ -17,6 +17,7 @@ $form_id = 'add_sys_edu_degrees';
     <input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>" />
 
     <div class="btnActions">
+        <input type="hidden" name="success_edit_url" value="<?php echo $referrer; ?>&edit_success=3">
         <button type="submit">Add Degree Option(s)</button>
     </div>
 </form>

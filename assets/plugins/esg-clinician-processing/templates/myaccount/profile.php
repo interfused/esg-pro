@@ -7,15 +7,23 @@ if (is_user_logged_in()) {
 $max_terms_to_insert = 10;
 function get_profile_alert()
 {
-    $message = 'default';
+    $message = $_GET['alert'] ?? "default";
     $mode = $_GET['mode'] ?? "default";
     $edit_success = $_GET['edit_success'] ?? "default";
 
-    $div_opening_tag = '<div class="alert">';
+    $div_opening_tag = '<div class="alert alert-info">';
     $div_closing_tag = '</div>';
 
     if ('case_studies' === $mode && 1 == $edit_success) {
         $message = 'Case study has been edited';
+    }
+
+    if (in_array($mode, array('practice_locations', 'education', 'fellowship')) && 2 == $edit_success) {
+        $message = 'New location has been added';
+    }
+
+    if (3 == $edit_success) {
+        $message = 'New option(s) have been added';
     }
 
     if ($message !== 'default') {
@@ -145,22 +153,32 @@ function esg_get_section_format($format = "default")
     }
 }
 
+function get_edit_profile_link($mode = "not_defined")
+{
+    $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+    switch ($mode) {
+        case "not_defined":
+            return $uri_parts[0];
+        default:
+            return $uri_parts[0] . '?mode=' . $mode;
+    }
+}
+
 function include_conditional_display_template($display_mode = "default")
 {
     $display_template = 'dashboard-edit-profile.php';
     $is_acf_form = false;
 
     $acf_user_post_ref = 'user_' . get_current_user_id();
-    $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
     $html_updated_message = '<div id="message" class="alert alert-info"><p>%s</p></div>';
 
     $format_section_header = '<h1 class="section_header">%s</h1>';
 
-    $add_system_membership_options_html = '<p>Don\'t see your associated membership options(s)? ';
-    $add_system_membership_options_html .= '<a href="' . $uri_parts[0] . '?mode=add_sys_loc_memberships">Add option(s)</a></p>';
+    $add_system_membership_options_html = '<p>Don\'t see your associated membership option(s)? ';
+    $add_system_membership_options_html .= '<br/><a class="btn" href="' . get_edit_profile_link('add_sys_loc_memberships')  . '">Add option(s)</a></p>';
 
-    $add_sys_practice_location_html = '<a href="' . $uri_parts[0] . '?mode=add_sys_practice_location" class="btn" >Add new location option</a>';
-    $add_sys_practice_services_html = '<a href="' . $uri_parts[0] . '?mode=add_sys_practice_services" class="btn" >Add new service option(s)</a>';
+    $add_sys_practice_location_html = '<a href="' . get_edit_profile_link('add_sys_practice_location') . '" class="btn" >Add new location option</a>';
+    $add_sys_practice_services_html = '<a href="' . get_edit_profile_link('add_sys_practice_services')  . '" class="btn" >Add new service option(s)</a>';
 
     //default
     $acf_form_args = array(
@@ -185,6 +203,7 @@ function include_conditional_display_template($display_mode = "default")
                 $is_acf_form = true;
                 $acf_form_args['fields'] = ['npi_number', 'professional_memberships'];
                 $acf_form_args['updated_message'] = __("Updated basic clinician fields", 'acf');
+                $acf_form_args['html_before_fields'] = $html_before_fields;
                 /*
                 acf_form(array(
                     'post_id' => $acf_user_post_ref,
@@ -200,68 +219,45 @@ function include_conditional_display_template($display_mode = "default")
                 break;
             case "recognition_and_awards":
                 $is_acf_form = true;
-                acf_form(array(
-                    'post_id' => $acf_user_post_ref,
-                    'fields'       => ['recognition_and_awards'],
-                    'post_title'    => false,
-                    'post_content'  => false,
-                    'updated_message' => __("Updated Recognition and Awards", 'acf'),
-                    'html_updated_message'  => $html_updated_message,
-                    'submit_value'  => __('Save')
-                ));
+
+                $acf_form_args['fields'] = ['recognition_and_awards'];
+                $acf_form_args['updated_message'] = __("Updated Recognition and Awards", 'acf');
                 //$display_template = esg_get_template_file('/myaccount/add_sys_user_awards.php');
                 break;
             case "education":
                 $pre_html = "<p><strong>Don't see your institution or study options listed below?</strong><br />";
-                $pre_html .= ' <a href="' . $uri_parts[0] . '?mode=add_sys_education_location" class="btn" >Add new institution</a>';
-                $pre_html .= ' <a href="' . $uri_parts[0] . '?mode=add_sys_edu_studies" class="btn" >Add new field of study option(s)</a>';
-                $pre_html .= ' <a href="' . $uri_parts[0] . '?mode=add_sys_edu_degrees" class="btn" >Add new degree option(s)</a>';
+                $pre_html .= ' <a href="' . get_edit_profile_link('add_sys_education_location') . '" class="btn" >Add new institution</a>';
+                $pre_html .= ' <a href="' . get_edit_profile_link('add_sys_edu_studies') . '" class="btn" >Add new field of study option(s)</a>';
+                $pre_html .= ' <a href="' . get_edit_profile_link('add_sys_edu_degrees') . '" class="btn" >Add new degree option(s)</a>';
                 $pre_html .= '</p>';
                 $is_acf_form = true;
-                acf_form(array(
-                    'post_id' => $acf_user_post_ref,
-                    'fields'       => ['education'],
-                    'html_before_fields' => $pre_html,
-                    'post_title'    => false,
-                    'post_content'  => false,
-                    'updated_message' => __("Updated Education", 'acf'),
-                    'html_updated_message'  => $html_updated_message,
-                    'submit_value'  => __('Save')
-                ));
+                $acf_form_args['fields'] = ['education'];
+                $acf_form_args['html_before_fields'] = $pre_html;
+                $acf_form_args['updated_message'] = __("Updated Education", 'acf');
+
+
                 break;
             case "residency":
-                $pre_html = "<p><strong>Don't see your institution listed in the options below?</strong><br />";
+                $pre_html = "<p><strong>Don't see your residency institution listed in the options below?</strong><br />";
                 $pre_html .= ' ' . $add_sys_practice_location_html;
 
                 $is_acf_form = true;
-                acf_form(array(
-                    'post_id' => $acf_user_post_ref,
-                    'fields'       => ['residency'],
-                    'html_before_fields' => $pre_html,
-                    'post_title'    => false,
-                    'post_content'  => false,
-                    'updated_message' => __("Updated Residency Info", 'acf'),
-                    'html_updated_message'  => '<div id="message" class="alert alert-info"><p>%s</p></div>',
-                    'submit_value'  => __('Save')
-                ));
-                //$display_template = esg_get_template_file('/myaccount/add_sys_user_awards.php');
+
+                $acf_form_args['fields'] = ['residency'];
+                $acf_form_args['html_before_fields'] = $pre_html;
+                $acf_form_args['updated_message'] = __("Updated Residency Information", 'acf');
+
                 break;
             case "fellowship":
                 $pre_html = "<p><strong>Don't see your fellowship institution or service/practice listed in the options below?</strong><br />";
                 $pre_html .= ' ' . $add_sys_practice_location_html;
-                $pre_html .= ' <a href="' . $uri_parts[0] . '?mode=add_system_service_category" class="btn" >Add new service option(s)</a>';
+                $pre_html .= ' <a href="' . get_edit_profile_link('add_system_service_category') . '" class="btn" >Add new service option(s)</a>';
 
                 $is_acf_form = true;
-                acf_form(array(
-                    'post_id' => $acf_user_post_ref,
-                    'fields'       => ['fellowship'],
-                    'html_before_fields' => $pre_html,
-                    'post_title'    => false,
-                    'post_content'  => false,
-                    'updated_message' => __("Updated Fellowship Info", 'acf'),
-                    'html_updated_message'  => '<div id="message" class="alert alert-info"><p>%s</p></div>',
-                    'submit_value'  => __('Save')
-                ));
+                $acf_form_args['fields'] = ['fellowship'];
+                $acf_form_args['html_before_fields'] = $pre_html;
+                $acf_form_args['updated_message'] = __("Updated Fellowship Info", 'acf');
+                $acf_form_args['return'] = get_edit_profile_link('fellowship&updated=true');
                 break;
 
 
@@ -297,8 +293,6 @@ function get_practice_locations()
 }
 function taxonomy_to_checkboxes($taxonomy, $field_name, $label = 'test label', $post_type = 'practice-location')
 {
-    $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
-
     $taxonomy_terms = get_taxonomy_terms_except_uncategorized($post_type, $taxonomy);
 
     $terms = get_terms(array(
@@ -321,13 +315,21 @@ function taxonomy_to_checkboxes($taxonomy, $field_name, $label = 'test label', $
     $html .= '</ul>';
     if (count($taxonomy_terms) <= 0) {
 
-        $html .= '<p>No options found. <a  href="' . $uri_parts[0] . '?mode=add_system_' . $taxonomy . '">Add New Option(s)</a></p>';
+        $html .= '<p>No options found. <a  href="' . get_edit_profile_link('add_system_' . $taxonomy) . '">Add New Option(s)</a></p>';
     }
     $html .= ' </fieldset>';
 
 
 
     return $html;
+}
+
+function success_edit_url_redirect()
+{
+    $new_url = $_POST['success_edit_url'] ?? 'default';
+    if ($new_url != 'default') {
+        header('Location: ' . $new_url);
+    }
 }
 
 function esg_add_system_practice_location($user_id = -1)
@@ -357,19 +359,17 @@ function esg_add_system_practice_location($user_id = -1)
         ))
     );
 
-    if ($user_id > 0) {
-        //add to users profile
-    }
-
-    return $post_id;
+    success_edit_url_redirect();
 }
+
+
 
 function esg_add_system_edu_location($user_id = -1)
 {
-    /*
-    echo '<h3>Attempt esg_add_system_edu_location</h3>';
-    echo '<pre>' . print_r($_POST, true) . '</pre>';
-    */
+
+    //echo '<h3>Attempt esg_add_system_edu_location</h3>';
+    //echo '<pre>' . print_r($_POST, true) . '</pre>';
+
     $base_args = array(
         'post_title' => convert_to_title_case($_POST['title']),
         'post_type' => 'education-facility'
@@ -392,11 +392,7 @@ function esg_add_system_edu_location($user_id = -1)
         ))
     );
 
-    if ($user_id > 0) {
-        //add to users profile
-    }
-
-    return $post_id;
+    //success_edit_url_redirect();
 }
 
 function esg_add_system_practice_services()
@@ -409,21 +405,34 @@ function esg_add_system_practice_services()
         }
     }
 
-    $new_url = $_POST['original_ref'] ?? 'default';
-    if ($new_url != 'default') {
-        header('Location: ' . $new_url);
-    }
+    success_edit_url_redirect();
 }
 
-function esg_add_system_taxonomy_options_from_post($inputname_prefix, $taxonomy)
+function esg_add_system_taxonomy_options_from_post()
 {
-    for ($i = 1; $i <= 10; $i++) {
-        if (isset($_POST[$inputname_prefix  . $i]) && strlen($_POST[$inputname_prefix  . $i]) > 0) {
-            $input = convert_to_title_case($_POST[$inputname_prefix . $i]);
-            //echo 'attempt insert tax term: ' . $input . ' to tax: ' . $taxonomy . '<br />';
-            wp_insert_term($input,  $taxonomy);
+    $max_terms_to_insert = 10;
+
+
+    /** GET NEW SYSTEM TAXONOMY OPTIONS FROM POST */
+    $add_taxonomy_options = array();
+    $add_taxonomy_options[] = array('post_key' => 'add_sys_edu_studies', 'field_input_pre' => 'studyfield_', 'taxonomy' => 'major_study');
+    $add_taxonomy_options[] = array('post_key' => 'add_sys_edu_degrees', 'field_input_pre' => 'studydegree_', 'taxonomy' => 'education_level');
+    $add_taxonomy_options[] = array('post_key' => 'addNewSystemLocationMemberships', 'field_input_pre' => 'membership_title_', 'taxonomy' => 'professional_membership');
+    $add_taxonomy_options[] = array('post_key' => 'add_case_study_categories', 'field_input_pre' => 'add_case_study_categories_', 'taxonomy' => 'case_study_category');
+
+    foreach ($add_taxonomy_options as $option) {
+        $pre = $option['field_input_pre'];
+        if (isset($_POST[$option['post_key']])) {
+            for ($i = 1; $i <= $max_terms_to_insert; $i++) {
+                if (isset($_POST[$pre . $i])) {
+                    $input = convert_to_title_case($_POST[$pre . $i]);
+
+                    wp_insert_term($input,  $option['taxonomy']);
+                }
+            }
         }
     }
+    success_edit_url_redirect();
 }
 
 function esg_practice_details_to_my_list()
@@ -532,84 +541,57 @@ function csv_taxonomy_terms_from_array($taxonomy, $array)
     }
     return implode(', ', $values);
 }
+/**
+ * returns html
+ */
 function get_hidden_fields_for_repeater($repeater_field)
 {
 
+    $html = '';
     $acf_post_ref = 'user_' . get_current_user_id();
     $data = get_field($repeater_field, $acf_post_ref);
     //pretty_print_r($data);
-    echo '<div id="practice-location-cards" class="cards-wrapper">';
+    if (!$data) {
+        return $html;
+    }
+    $html .= '<div id="practice-location-cards" class="cards-wrapper">';
     foreach ($data as $row) {
-        echo '<div class="card overview">';
-        echo '<h4>' . $row['practice_location']->post_title . '</h4>';
-        echo 'Address: ' . get_practice_address($row['practice_location']->ID);
+        $html .= '<div class="card overview">';
+        $html .= '<h4>' . $row['practice_location']->post_title . '</h4>';
+        $html .= 'Address: ' . get_practice_address($row['practice_location']->ID);
 
         if ($row['services_offered']) {
-            echo '<p><strong>Services Offered:</strong> ';
-            echo csv_taxonomy_terms_from_array('service_category', $row['services_offered']);
+            $html .= '<p><strong>Services Offered:</strong> ';
+            $html .= csv_taxonomy_terms_from_array('service_category', $row['services_offered']);
         }
-        echo '</p>';
-        echo '</div>';
+        $html .= '</p>';
+        $html .= '</div>';
     }
-    echo '</div>';
-    return;
+    $html .= '</div>';
+    return $html;
     if (have_rows($repeater_field, $acf_post_ref)) :
         while (have_rows($repeater_field)) : the_row();
             $location_id = get_sub_field('practice_location');
-            echo 'location_id: ' . $location_id;
+            $html .= 'location_id: ' . $location_id;
 
         // Do something...
         endwhile;
     else :
         // no rows found
-        echo 'set it up: ' . $repeater_field;
+        $html .= 'set it up: ' . $repeater_field;
         $test = get_field($repeater_field, false);
-        echo '<pre>' . print_r($test, true) . '</pre>';
-        echo get_sub_field('sub_field');
+        $html .= '<pre>' . print_r($test, true) . '</pre>';
+        $html .= get_sub_field('sub_field');
     endif;
+    return $html;
 }
 ?>
 <?php
 if (isset($_POST['addSystemPracticeLocation']) && isset($_REQUEST['_wpnonce']) && wp_verify_nonce($_REQUEST['_wpnonce'], 'add-system-practice-location')) {
     esg_add_system_practice_location(get_current_user_id());
 }
-/** GET NEW SYSTEM TAXONOMY OPTIONS FROM POST */
-$add_taxonomy_options = array();
-$add_taxonomy_options[] = array('post_key' => 'add_sys_edu_studies', 'field_input_pre' => 'studyfield_', 'taxonomy' => 'major_study');
-$add_taxonomy_options[] = array('post_key' => 'add_sys_edu_degrees', 'field_input_pre' => 'studydegree_', 'taxonomy' => 'education_level');
-foreach ($add_taxonomy_options as $option) {
-    $pre = $option['field_input_pre'];
-    if (isset($_POST[$option['post_key']])) {
-        for ($i = 1; $i <= $max_terms_to_insert; $i++) {
-            if (isset($_POST[$pre . $i])) {
-                $input = convert_to_title_case($_POST[$pre . $i]);
 
-                wp_insert_term($input,  $option['taxonomy']);
-            }
-        }
-    }
-}
-/*
-if (isset($_POST['add_sys_edu_studies'])) {
-    for ($i = 1; $i <= $max_terms_to_insert; $i++) {
-        if (isset($_POST['studyfield_' . $i])) {
-            $input = convert_to_title_case($_POST['studyfield_' . $i]);
 
-            wp_insert_term($input,  'major_study');
-        }
-    }
-}
-
-if (isset($_POST['add_sys_edu_degrees'])) {
-    for ($i = 1; $i <= $max_terms_to_insert; $i++) {
-        if (isset($_POST['studydegree_' . $i])) {
-            $input = convert_to_title_case($_POST['studydegree_' . $i]);
-
-            wp_insert_term($input,  'major_study');
-        }
-    }
-}
-*/
 
 
 
@@ -621,16 +603,10 @@ if (isset($_POST['addSystemPracticeServices']) && isset($_REQUEST['_wpnonce']) &
     esg_add_system_practice_services();
 }
 
-if (isset($_POST['addNewSystemLocationMemberships'])) {
-    esg_add_system_taxonomy_options_from_post('membership_title_', 'professional_membership');
-    //pretty_print_r($_POST);
-}
 
-if (isset($_POST['add_case_study_categories'])) {
-    esg_add_system_taxonomy_options_from_post('add_case_study_categories_', 'case_study_category');
-    //pretty_print_r($_POST);
-}
 
+
+esg_add_system_taxonomy_options_from_post();
 
 if (isset($_POST['addPracticeDetailsToMyList']) && isset($_REQUEST['_wpnonce']) && wp_verify_nonce($_REQUEST['_wpnonce'], 'addPracticeDetailsToMyList')) {
     esg_practice_details_to_my_list();
