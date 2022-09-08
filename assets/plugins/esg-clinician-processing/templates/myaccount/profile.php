@@ -666,6 +666,7 @@ $display_mode = $_GET['mode'] ?? "default";
                 $nav_array[] = array('k' => 'residency', 'display_txt' => 'Residency');
                 $nav_array[] = array('k' => 'fellowship', 'display_txt' => 'Fellowship');
                 $nav_array[] = array('k' => 'case_studies', 'display_txt' => 'My Case Studies');
+                $nav_array[] = array('k' => 'blog_posts', 'display_txt' => 'My Articles');
 
                 foreach ($nav_array as $option) {
                     $active_class_text = $option['k'];

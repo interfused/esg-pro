@@ -1,4 +1,9 @@
 /** FORM RESET / BASIC STYLE **/
+.btn-sizing {
+  border-radius: $border-radius-px;
+  padding: 0.5em 1em;
+}
+
 form {
   @extend .swatch1;
   background-color: lighten($base-color, 50%);
@@ -75,5 +80,43 @@ form.acf-form {
   .acf-form-submit {
     border-top: 1px solid $light-gray;
     padding-top: 1em;
+  }
+}
+
+/** ACF FRONTEND FORM OVERWRITE **/
+form.frontend-form {
+  ul.acf-checkbox-list {
+    column-count: 2;
+    li {
+      -webkit-column-break-inside: avoid;
+      ul.children {
+        padding-left: 0;
+        margin-left: 1em;
+      }
+    }
+  }
+
+  .acf-actions {
+    .acf-button {
+      line-height: 1;
+    }
+  }
+
+  .acf-button,
+  .acf-button.button,
+  input[type="submit"] {
+    border-radius: $border-radius-px;
+  }
+
+  .fea-submit-button {
+    @extend .btn-sizing;
+    line-height: 2;
+  }
+}
+
+#acf-popup .acf-popup-box {
+  .acf-submit .button {
+    @extend .btn-sizing;
+    line-height: 1;
   }
 }

@@ -1,3 +1,4 @@
+@import "setup/variables.scss";
 @import "setup/flexbox.grid.scss";
 @import "setup/colors.scss";
 @import "setup/typography.scss";
@@ -110,6 +111,10 @@ fieldset.practice_service_categories {
   height: 300px;
   margin-bottom: 1em;
 
+  &:last-child {
+    margin-bottom: 0;
+  }
+
   .excerpt {
     margin: 0;
   }
@@ -120,6 +125,16 @@ fieldset.practice_service_categories {
     height: 150px;
     width: 150px;
     position: relative;
+
+    img {
+      height: 100%;
+      width: auto;
+      max-width: unset;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 }
 
@@ -138,10 +153,6 @@ fieldset.practice_service_categories {
     padding: 0;
     align-items: center;
 
-    img {
-      height: 100%;
-      width: auto;
-    }
     .content {
       padding-left: 1em;
       flex-grow: 1;
@@ -153,9 +164,20 @@ fieldset.practice_service_categories {
       }
       .card_actions {
         text-align: right;
+        a {
+          opacity: 0.5;
+          font-weight: bold;
+          &:hover,
+          &:active {
+            opacity: 1;
+          }
+        }
       }
     }
   }
+}
+.alert + section {
+  margin-top: 2em;
 }
 
 section + section {

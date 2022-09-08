@@ -1,18 +1,16 @@
 <form id="practiceLocations" method="POST" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 
+    <?php
+    $html = get_hidden_fields_for_repeater('practice_locations_details');
+    if ($html != '') {
+        echo '<section>';
+        echo sprintf(esg_get_section_format('default'), 'My Current Practice Location(s)');
+        echo $html;
+        echo '</section>';
+        echo '<hr />';
+    }
+    ?>
 
-    <section>
-
-        <?php
-        $html = get_hidden_fields_for_repeater('practice_locations_details');
-        if ($html != '') {
-            echo sprintf(esg_get_section_format('default'), 'My Current Practice Location(s)');
-            echo $html;
-            echo '<hr />';
-        }
-        ?>
-
-    </section>
     <section id="addNew">
         <?php echo sprintf(esg_get_section_format('default'), 'Add Your New Practice Location & Services'); ?>
 
